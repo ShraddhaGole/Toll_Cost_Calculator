@@ -51,6 +51,7 @@ public class FetchURL extends AsyncTask<String, Void, String> {
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
+        Log.d("url_obtained: ", strUrl);//*************************************************
         try {
             URL url = new URL(strUrl);
             // Creating an http connection to communicate with url
@@ -66,7 +67,7 @@ public class FetchURL extends AsyncTask<String, Void, String> {
                 sb.append(line);
             }
             data = sb.toString();
-            Log.d("mylog", "Downloaded URL: " + data.toString());
+            Log.d("treasure", "Downloaded URL: " + data.toString());
             br.close();
         } catch (Exception e) {
             Log.d("mylog", "Exception downloading URL: " + e.toString());
@@ -74,7 +75,7 @@ public class FetchURL extends AsyncTask<String, Void, String> {
             iStream.close();
             urlConnection.disconnect();
         }
-        Log.d("mylog","heyy");
+        Log.d("mylog", "heyy");
 
         return data;
     }

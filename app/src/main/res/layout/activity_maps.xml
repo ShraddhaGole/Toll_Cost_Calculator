@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent">
 
     <fragment
 
@@ -12,30 +12,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
+
     <EditText
+        android:id="@+id/et1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Enter souce:"
-        android:text="surathkal"
-        android:textSize="30dp"
-        android:id="@+id/et1"
-        />
+        android:textSize="30dp" />
+
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/et2"
-        android:hint="Enter destination"
-        android:text="bengaluru"
-        android:textSize="30dp"
-        android:layout_below="@+id/et1"
-        />
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/et1"
+        android:hint="Enter destination"
+        android:textSize="30dp" />
+
+    <Button
         android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignTop="@+id/et2"
-        android:text="GO"
         android:layout_alignParentRight="true"
-        />
+        android:text="GO" />
+
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:text="total no of tolls:"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txt"
+        android:layout_alignRight="@+id/txt"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="1dp"
+        android:textSize="30dp" />
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -19,8 +20,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -32,37 +39,95 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private MarkerOptions place1, place2;
     Button getDirection;
     private Polyline currentPolyline;
-    EditText et1, et2;
+    String source, destination;
+    PlacesClient placesClient;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        source = "";
+        destination = "";
         getDirection = findViewById(R.id.btn);
-        et1 = findViewById(R.id.et1);
-        et2 = findViewById(R.id.et2);
-        TextView txtView = (TextView) findViewById(R.id.text);
-        //TextView tv=(TextView)findViewById(R.id.txt);
 
         getDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (et1.getText().toString().matches("") || et2.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "please enter the locations", Toast.LENGTH_LONG).show();
+                if (source.matches("") && destination.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter both the locations", Toast.LENGTH_LONG).show();
+                } else if (source.matches("") && !destination.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter the source location", Toast.LENGTH_LONG).show();
+                } else if (!source.matches("") && destination.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter the destination location", Toast.LENGTH_LONG).show();
                 } else {
                     mMap.clear();
-                    place1 = new MarkerOptions().position(searchLocation(et1)).title("Location 1");
-                    place2 = new MarkerOptions().position(searchLocation(et2)).title("Location 2");
+                    place1 = new MarkerOptions().position(searchLocation(source)).title("Source");
+                    place2 = new MarkerOptions().position(searchLocation(destination)).title("Destination");
                     new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
                 }
             }
         });
-        //27.658143,85.3199503
-        //27.667491,85.3208583
-//        place1 = new MarkerOptions().position(searchLocation(et1)).title("Location 1");
-//        place2 = new MarkerOptions().position(searchLocation(et2)).title("Location 2");
+
+
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        String apiKey = "AIzaSyAgO7JJG2V4YduaZ9vC_TjEaUtE1tyuzQ8";
+
+        // Setup Places Client
+        if (!Places.isInitialized()) {
+            Places.initialize(MapsActivity.this, apiKey);
+        }
+        // Retrieve a PlacesClient (previously initialized - see MainActivity)
+        placesClient = Places.createClient(this);
+
+        final AutocompleteSupportFragment autocompleteSupportFragment_1 =
+                (AutocompleteSupportFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.et1);
+
+        final AutocompleteSupportFragment autocompleteSupportFragment_2 =
+                (AutocompleteSupportFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.et2);
+
+        autocompleteSupportFragment_1.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
+        autocompleteSupportFragment_2.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
+
+        autocompleteSupportFragment_1.setOnPlaceSelectedListener(
+                new PlaceSelectionListener() {
+                    @Override
+                    public void onPlaceSelected(Place place) {
+                        final LatLng latLng = place.getLatLng();
+                        System.out.println("Source: " + place.getName());
+                        source = place.getName();
+                        Toast.makeText(MapsActivity.this, place.getAddress(), Toast.LENGTH_SHORT).show();
+                        Log.d("auto suggestions 1", "" + latLng.latitude + "\n" + latLng.longitude);
+                        System.out.println("auto suggestions 1: " + latLng.latitude + "\n" + latLng.longitude);
+                    }
+
+                    @Override
+                    public void onError(Status status) {
+                        Toast.makeText(MapsActivity.this, "" + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        autocompleteSupportFragment_2.setOnPlaceSelectedListener(
+                new PlaceSelectionListener() {
+                    @Override
+                    public void onPlaceSelected(Place place) {
+                        final LatLng latLng = place.getLatLng();
+                        System.out.println("Destination: " + place.getName());
+                        destination = place.getName();
+                        Toast.makeText(MapsActivity.this, "" + place.getAddress(), Toast.LENGTH_SHORT).show();
+                        Log.d("auto suggestions 2", "" + latLng.latitude + "\n" + latLng.longitude);
+                        System.out.println("auto suggestions 2: " + latLng.latitude + "\n" + latLng.longitude);
+                    }
+
+                    @Override
+                    public void onError(Status status) {
+                        Toast.makeText(MapsActivity.this, "" + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
@@ -103,17 +168,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             currentPolyline.remove();
         }
         Log.d("shrad", "yes printed");
-        Toast.makeText(getApplicationContext(), "in Ontask done", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), "in Ontask done", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Route", Toast.LENGTH_SHORT).show();
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
 //        TextView txtView = (TextView)findViewById(R.id.text);
 //        txtView.setText((Integer) values[1]);
     }
 
 
-    public LatLng searchLocation(EditText locationSearch) {
+    public LatLng searchLocation(String location) {
         // EditText locationSearch = (EditText) findViewById(R.id.editText);
 
-        String location = locationSearch.getText().toString();
         List<Address> addressList = null;
         Log.d("_hela", location);
         Log.d("_hela", "entered search location");

@@ -40,6 +40,20 @@ For task one, we can easily achieve this with the help of google maps API. The g
 ### RESULTS
 We could obtain the optimal path with the least toll cost.
 
+* Input
+  
+  Using the API for webpage
+  ![Input Web](Result/input-web.jpeg "Input using webpage")
+  Using the API for android app
+  <center>
+  <img src="Result/input-android.jpeg" height="250" width="150">
+  </center>
+
+* Output
+
+  The console has the count for the number of tolls in the optimal part (_```13``` tolls in this case_)
+  ![Output](Result/output.jpeg "Output")
+
 ### FUTURE WORK
 The frontend can be improved. The method of collecting information from the user can be improved.
 

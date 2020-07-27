@@ -12,10 +12,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Vishal on 10/20/2018.
- */
-
 public class FetchURL extends AsyncTask<String, Void, String> {
     Context mContext;
     String directionMode = "driving";
@@ -51,7 +47,7 @@ public class FetchURL extends AsyncTask<String, Void, String> {
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
-        Log.d("url_obtained: ", strUrl);//*************************************************
+        Log.d("url_obtained: ", strUrl);
         try {
             URL url = new URL(strUrl);
             // Creating an http connection to communicate with url

@@ -42,7 +42,7 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
             jObject = new JSONObject(jsonData[0]);
             Log.d("in_pars_jsonData[0]", jsonData[0].toString());
 
-            calculate(jsonData[0].toString());//***************************
+            calculate(jsonData[0].toString());
             DataParser parser = new DataParser();
             Log.d("in_pars_parser", parser.toString());
 
@@ -66,7 +66,6 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
             Log.d("in_pars_yesss", String.valueOf(job));
             //int sum=0;
 
-            //**********************************
             JSONArray route = job.getJSONArray("routes");
             //List<String> posterPaths = new ArrayList<String>(json1arr.length());
             for (int i = 0; i < route.length(); i++) {
@@ -85,7 +84,7 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
             }
             //Toast.makeText((Context) taskCallback,"total number of tolls are:" +sum,Toast.LENGTH_LONG).show();
             Log.d("in_pars_my_answer", String.valueOf(sum));
-            //**********************************
+            
 
         } catch (JSONException err) {
             Log.d("Error", err.toString());

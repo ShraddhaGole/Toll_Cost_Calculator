@@ -29,8 +29,8 @@ For task one, we can easily achieve this with the help of google maps API. The g
   total = 0;
   myroute = result.routes[0];
   totalTolls=0;
-  for ( i = 0; i < myroute.legs.length; i++)
-  for(] j=0;j < myroute.legs[i].steps.length;j++)
+  for (i = 0; i < myroute.legs.length; i++)
+  for(j=0;j < myroute.legs[i].steps.length;j++)
   if(containsWord(myroute.legs[i].steps[j].instructions, 'toll road'))
   totalTolls+=1;
   ```

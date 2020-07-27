@@ -25,14 +25,14 @@ For task one, we can easily achieve this with the help of google maps API. The g
   The result of the direction request is a JSON object. It has the routes and legs which contains the address of the waypoints. This contains the string "toll road" if it has a toll. We searched the JSON object for the string and counted the total number of tolls on the way.
   Pseudocode:
   ```java
-  computeTotalTolls(result)
+  computeTotalTolls (result)
   total = 0;
   myroute = result.routes[0];
-  totalTolls=0;
+  totalTolls = 0;
   for (i = 0; i < myroute.legs.length; i++)
-  for(j=0;j < myroute.legs[i].steps.length;j++)
-  if(containsWord(myroute.legs[i].steps[j].instructions, 'toll road'))
-  totalTolls+=1;
+  for (j = 0;j < myroute.legs[i].steps.length; j++)
+  if (containsWord(myroute.legs[i].steps[j].instructions, 'toll road'))
+  totalTolls += 1;
   ```
 * Phase 5:Printing the total cost.
   We assigned a dummy cost which when multiplied by the total number of The toll would return the required balance the user would need to have in their FasTag Wallet.
